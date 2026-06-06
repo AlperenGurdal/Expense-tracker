@@ -71,6 +71,34 @@ def delete_expenses(expenses):
     else:
         print("Invalid expense number.")
 
+def view_by_category(expenses):
+    if not expenses:
+        print("No expenses yet.")
+        return
+    category_totals = {}
+    total_spent = 0
+
+    for expense in expenses:
+        category = expense.get("category","No Category")
+        amount = expense["amount"]
+
+        if category in category_totals:
+            category_totals[category] += amount
+        else:
+            category_totals[category] = amount
+        total_spent += amount
+
+
+    print("\n=== Spending by Category ===")
+
+    for category, total in category_totals.items():
+        print(f"{category}: ${total:.2f}")  
+    
+    print("\n----------------------")
+    print(f"TOTAL: ${total_spent:.2f}")
+
+    
+
 def main():
     expenses = load_expenses()
     while True:
@@ -78,8 +106,9 @@ def main():
         print("1. Add Expense")
         print("2. View Expense")
         print("3. View Total")
-        print("4. Delete Expense")
-        print("5. Exit")
+        print("4. View Expenses By Category")
+        print("5. Delete Expense")
+        print("6. Exit")
 
         choice = input("choose an option: ")
 
@@ -90,8 +119,10 @@ def main():
         elif choice == "3":
             view_total(expenses)
         elif choice == "4":
-            delete_expenses(expenses)
+            view_by_category(expenses)
         elif choice == "5":
+            delete_expenses(expenses)
+        elif choice == "6":
             print("Goodbye")
             break
         else:

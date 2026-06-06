@@ -1,6 +1,12 @@
 [
     {
-        "description": "coffee",
-        "amount": 4.12
+        "description": "Bus Ticket",
+        "amount": 3.5,
+        "category": "transportation"
+    },
+    {
+        "description": "Coffee",
+        "amount": 4.8,
+        "category": "Food"
     }
 ]
