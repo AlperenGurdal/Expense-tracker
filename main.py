@@ -1,4 +1,5 @@
 import json
+import csv
 
 FILE_NAME = "expenses.json"
 
@@ -133,7 +134,20 @@ def edit_expenses(expenses):
     save_expenses(expenses)
     print("Expense updated!")
 
+def export_to_csv(expenses):
+    if not expenses:
+        print("No expenses to export")
+        return
+    
+    with open("expenses.csv", "w", newline="") as file:
+        writer = csv.writer(file)
 
+        writer.writerow(["Description", "Amount", "Category"])
+    
+        for expense in expenses:
+            writer.writeow([expense["description"], expense["amount"], expense.get("category", "No Category")])
+    
+    print("Expenses are now exported to expenses.csv")
     
 def main():
     expenses = load_expenses()
@@ -145,6 +159,7 @@ def main():
         print("4. View Expenses By Category")
         print("5. Edit Expense")
         print("6. Delete Expense")
+        print("7. Export to CSV")
         print("7. Exit")
 
         choice = input("choose an option: ")
@@ -162,6 +177,8 @@ def main():
         elif choice == "6":
             delete_expenses(expenses)
         elif choice == "7":
+            export_to_csv(expenses)
+        elif choice == "8":
             print("Goodbye")
             break
         else:
