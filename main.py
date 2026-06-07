@@ -160,7 +160,7 @@ def main():
         print("5. Edit Expense")
         print("6. Delete Expense")
         print("7. Export to CSV")
-        print("7. Exit")
+        print("8. Exit")
 
         choice = input("choose an option: ")
 
