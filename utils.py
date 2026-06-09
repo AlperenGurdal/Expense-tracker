@@ -1,5 +1,8 @@
 import csv
-from storage import save_expenses
+from storage import (
+    save_expenses,
+    save_income
+)
 
 def add_expenses(expenses):
     description = input("description: ")
@@ -39,7 +42,7 @@ def view_total(expenses):
     total = sum(expense["amount"] for expense in expenses)
     print(f"Total spent: ${total:.2f}")
 
-def delete_expenses(expenses):
+def delete_expenses(expenses):#gonna be editted
     if not expenses:
         print("no expense to delete")
         return
@@ -61,7 +64,7 @@ def delete_expenses(expenses):
     else:
         print("Invalid expense number.")
 
-def view_by_category(expenses):
+def view_by_category(expenses):#gonna be editted
     if not expenses:
         print("No expenses yet.")
         return
@@ -87,7 +90,7 @@ def view_by_category(expenses):
     print("\n----------------------")
     print(f"TOTAL: ${total_spent:.2f}")
 
-def edit_expenses(expenses):
+def edit_expenses(expenses):#gonna be editted
     if not expenses:
         print("no expenses to edit")
         return
@@ -123,7 +126,7 @@ def edit_expenses(expenses):
     save_expenses(expenses)
     print("Expense updated!")
 
-def export_to_csv(expenses):
+def export_to_csv(expenses):#gonna be editted
     if not expenses:
         print("No expenses to export")
         return
@@ -134,6 +137,52 @@ def export_to_csv(expenses):
         writer.writerow(["Description", "Amount", "Category"])
     
         for expense in expenses:
-            writer.writeow([expense["description"], expense["amount"], expense.get("category", "No Category")])
+            writer.writerow([expense["description"], expense["amount"], expense.get("category", "No Category")])
     
     print("Expenses are now exported to expenses.csv")
+
+    #######################INCOME###################################
+
+def add_income(income):
+    description = input("description: ")
+    try:
+        amount = float(input("amount: "))
+    except ValueError:
+        print("Invalid amount. Please enter a number.")
+        return
+    category = input("category: ")
+
+    income.append({ "type": "income", "description": description,"amount": amount, "category": category})
+    
+    save_income(income)
+    print("Income Added!")        
+
+def view_income(income):
+    if not income:
+        print("no income yet")
+        return
+    
+    print("\n === Income ===")
+    
+    for i, entry in enumerate(income, start=1):
+        category = entry.get("category", "No Category")
+
+        print(f"{i}. {entry['description']} "f"({category}) - "f"${entry['amount']:.2f}")
+            
+def view_income_total(income):
+    total = sum(item["amount"] for item in income)
+
+    print(f"Total Income: ${total:.2f}")
+    
+def view_balance(expenses, income):
+    total_expenses = sum(expense["amount"]for expense in expenses)
+
+    total_income = sum(item["amount"]for item in income)
+
+    balance = total_income - total_expenses
+
+    print("\n=== Financial Summary ===")
+    print(f"Income:   ${total_income:.2f}")
+    print(f"Expenses: ${total_expenses:.2f}")
+    print("----------------------")
+    print(f"Balance:  ${balance:.2f}")

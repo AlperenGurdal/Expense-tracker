@@ -1,0 +1,8 @@
+[
+    {
+        "type": "income",
+        "description": "Payment",
+        "amount": 2300.0,
+        "category": "work"
+    }
+]
