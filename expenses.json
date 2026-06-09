@@ -1,12 +1,17 @@
 [
     {
-        "description": "Bus Ticket",
-        "amount": 3.5,
-        "category": "transportation"
+        "description": "  ",
+        "amount": 4.8,
+        "category": "Food"
     },
     {
-        "description": "Coffee",
-        "amount": 4.8,
+        "description": "Diamond ring",
+        "amount": 2000.0,
+        "category": "Engagement"
+    },
+    {
+        "description": "Dinner",
+        "amount": 12.0,
         "category": "Food"
     }
 ]
