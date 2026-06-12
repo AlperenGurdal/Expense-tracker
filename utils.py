@@ -91,6 +91,8 @@ def view_by_category(expenses):#gonna be editted
     print(f"TOTAL: ${total_spent:.2f}")
 
 def edit_expenses(expenses):#gonna be editted
+    
+
     if not expenses:
         print("no expenses to edit")
         return
@@ -103,13 +105,17 @@ def edit_expenses(expenses):#gonna be editted
         print("invalid input")
         return
     
+    if not (0 <= index < len(expenses)):
+        print("Invalid expense number.")
+        return
+    
     expense = expenses[index]
     print("\nLeave blank to keep current value.")
 
     description = input(f"Description [{expense['description']}]: ")
     amount_input = input(f"Amount [{expense['amount']}]: ")
-    category = input(f"description[{expense['category']}]: ")
-
+    category = input(f"Category [{expense['category']}]: ")
+    
     if description:
         expense["description"] = description
 
@@ -173,6 +179,94 @@ def view_income_total(income):
     total = sum(item["amount"] for item in income)
 
     print(f"Total Income: ${total:.2f}")
+
+def edit_income(income):
+    if not income:
+        print("no income to edit")
+        return
+
+    view_income(income)
+
+    try:
+        index = int(input("Enter income number to edit: ")) - 1
+    except ValueError:
+        print("invalid input")
+        return
+
+    if not (0 <= index < len(income)):
+        print("Invalid income number.")
+        return
+
+    entry = income[index]
+    print("\nLeave blank to keep current value.")
+
+    description = input(f"Description [{entry['description']}]: ")
+    amount_input = input(f"Amount [{entry['amount']}]: ")
+    category = input(f"Category [{entry['category']}]: ")
+
+    if description:
+        entry["description"] = description
+
+    if amount_input:
+        try:
+            entry["amount"] = float(amount_input)
+        except ValueError:
+            print("Invalid amount.")
+            return
+
+    if category:
+        entry["category"] = category
+
+    save_income(income)
+    print("Income updated!")
+
+def view_income_by_category(income):#gonna be editted
+    if not income:
+        print("No income yet.")
+        return
+    category_totals = {}
+    total_spent = 0
+
+    for entry in income:
+        category = entry.get("category","No Category")
+        amount = entry["amount"]
+
+        if category in category_totals:
+            category_totals[category] += amount
+        else:
+            category_totals[category] = amount
+        total_spent += amount
+
+
+    print("\n=== Income by Category ===")
+
+    for category, total in category_totals.items():
+        print(f"{category}: ${total:.2f}")  
+    
+    print("\n----------------------")
+    print(f"TOTAL: ${total_spent:.2f}")
+
+def delete_income(income):#gonna be editted
+    if not income:
+        print("no income to delete")
+        return
+    
+    view_income(income)
+    
+    try:
+        index = int(input("Enter income number to delete: "))
+        index = index -1
+    except ValueError:
+        print("invalid input")
+        return
+    
+    if  0 <= index < len(income):
+        removed = income.pop(index)
+
+        save_income(income)
+        print(f"Deleted: {removed['description']}")
+    else:
+        print("Invalid expense number.")
     
 def view_balance(expenses, income):
     total_expenses = sum(expense["amount"]for expense in expenses)
@@ -186,3 +280,51 @@ def view_balance(expenses, income):
     print(f"Expenses: ${total_expenses:.2f}")
     print("----------------------")
     print(f"Balance:  ${balance:.2f}")
+
+def view_net_by_category(expenses, income):
+    net_categories = {}
+
+    # Add expenses (negative impact)
+    for e in expenses:
+        category = e.get("category", "No Category")
+        amount = -e["amount"]
+
+        if category in net_categories:
+            net_categories[category] += amount
+        else:
+            net_categories[category] = amount
+
+    # Add income (positive impact)
+    for i in income:
+        category = i.get("category", "No Category")
+        amount = i["amount"]
+
+        if category in net_categories:
+            net_categories[category] += amount
+        else:
+            net_categories[category] = amount
+
+    print("\n=== Net Category Summary ===")
+
+    for category, total in net_categories.items():
+        sign = "+" if total >= 0 else "-"
+        print(f"{category}: {sign}${abs(total):.2f}")
+
+def monthly_summary(expenses, income):
+    total_expenses = sum(e["amount"] for e in expenses)
+    total_income = sum(i["amount"] for i in income)
+
+    net = total_income - total_expenses
+
+    print("\n=== Monthly Summary ===")
+    print(f"Total Income:   ${total_income:.2f}")
+    print(f"Total Expenses: ${total_expenses:.2f}")
+    print("----------------------")
+    print(f"Net Balance:    ${net:.2f}")
+
+    if net > 0:
+        print("Status: Positive month 👍")
+    elif net < 0:
+        print("Status: Negative month ⚠️")
+    else:
+        print("Status: Break-even")

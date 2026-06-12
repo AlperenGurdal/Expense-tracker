@@ -2,7 +2,7 @@
     {
         "type": "income",
         "description": "Payment",
-        "amount": 2300.0,
+        "amount": 2400.0,
         "category": "work"
     }
 ]
